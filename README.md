@@ -142,6 +142,4 @@ Twiddle algorithm can be used to find optimized PID coefficients.
 ### PID controller is a model free controller, i.e. it does not use a model of the car. Could you explain the pros and cons of this type of controller?
 Pros are it does not require deriving kinematic model or dynamic model of the system in order to control the system. Its fast to calculate (high compuation) and it does not suffer from design complexity. 
 
-Cons are
-
-### What would you do to improve the PID controller?
+Cons are PID controllers are hard to tune and they do not guarantee robustness in presence of noises and disturbances.
