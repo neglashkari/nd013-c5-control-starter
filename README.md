@@ -116,3 +116,32 @@ Answer the following questions:
 - If the simulation freezes on the desktop mode but is still running on the terminal, close the desktop and restart it.
 - When you will be tuning the PID parameters, try between those values:
 
+# Results
+Below some screenshots of Carla Simulator is provided showing the car is successfully tracking the desired trajectory (i.e., moving between lanes, bypassing other cars and making right turn at the intersectio):
+![Capture](https://user-images.githubusercontent.com/109758200/199138425-1bd1698c-14fc-432b-99e8-08d8f7518d2a.PNG)
+![Capture2](https://user-images.githubusercontent.com/109758200/199138438-4e1f2522-b1c1-477c-b9ac-1b0e7c127639.PNG)
+![Capture3](https://user-images.githubusercontent.com/109758200/199138451-3f1ec2f8-8c84-4246-b225-eea80c48f851.PNG)
+![Capture4](https://user-images.githubusercontent.com/109758200/199138462-181499c3-9366-4470-a722-322dd1b0cd37.PNG)
+![Capture5](https://user-images.githubusercontent.com/109758200/199138405-3fd19e9f-ee0a-44e7-b561-41c9c655c234.PNG)
+
+Performance plots are shown below which helps evaluating the efficieny of our PID controller: 
+![plot_1_new](https://user-images.githubusercontent.com/109758200/199138804-367e984d-36c9-407e-86a4-a786ea53fc9e.PNG)
+![plot_2_new](https://user-images.githubusercontent.com/109758200/199138818-21e7dd19-ca29-400f-8448-6e5b62c5944e.PNG)
+
+### Add the plots to your report and explain them (describe what you see)
+From the steer plots, steering error is still oscillating which indicates more PID tuning is required. Also, this can be because of the method that desired yaw is calculated, i.e., the last points of the path. To improve steering control performance, we can use the closest point of the reference path to the ego vehicle (instead of the last point of the reference path).
+
+From the throttle plots (i.e., throttle error measured as the desired vs actual velocity, and corresponding throttle and break output), one can see it's initially oscilating, and then the throttle output settles to a near constant thanks to our PID controller. Exception is at sharp turns (e.g. iteration ~100 that vehicle turns right at intersection), where the throttle and break output vary. 
+
+### What is the effect of the PID according to the plots, how each part of the PID affects the control command?
+From the above plots, car's oscillation gets worse with the increase of proportional gain ``kp``; this oscillation can be controlled with increasing derivative gain ``kd``. Moreover, the integral gain ``ki`` helps reducing offset.
+
+### How would you design a way to automatically tune the PID parameters?
+Twiddle algorithm can be used to find optimized PID coefficients.
+
+### PID controller is a model free controller, i.e. it does not use a model of the car. Could you explain the pros and cons of this type of controller?
+Pros are it does not require deriving kinematic model or dynamic model of the system in order to control the system. Its fast to calculate (high compuation) and it does not suffer from design complexity. 
+
+Cons are
+
+### What would you do to improve the PID controller?
