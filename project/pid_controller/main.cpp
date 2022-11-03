@@ -226,10 +226,10 @@ int main ()
   **/
 
   PID pid_steer = PID();
-  pid_steer.Init(0.33, 0.001, 0.8, 1.2, -1.2);
+  pid_steer.Init(.365, .001, 0.0, 1.2, -1.2);
   
   PID pid_throttle = PID();
-  pid_throttle.Init(0.2, 0.001, 0.2, 1.0, -1.0);
+  pid_throttle.Init(.170, .00075, .01, 1, -1);
 
   h.onMessage([&pid_steer, &pid_throttle, &new_delta_time, &timer, &prev_timer, &i, &prev_timer](uWS::WebSocket<uWS::SERVER> ws, char *data, size_t length, uWS::OpCode opCode)
   {
@@ -304,7 +304,13 @@ int main ()
           * TODO (step 3): compute the steer error (error_steer) from the position and the desired trajectory
           **/
 		 // steering error is the difference between the desired steer (path planner points) and actual steer ('yaw'). 
-          error_steer = angle_between_points(x_position, y_position, x_points.back(), y_points.back()) - yaw;
+          double angle = 0.0;
+          if ((x_points.size() > 0) && (y_points.size() > 0)) { 
+            angle = angle_between_points(x_points[0], y_points[0], x_points[x_points.size() - 1], y_points[y_points.size() - 1]);
+          }
+          error_steer=yaw - angle;
+          
+//           error_steer = angle_between_points(x_position, y_position, x_points.back(), y_points.back()) - yaw;
 
 
           /**
@@ -340,7 +346,7 @@ int main ()
           **/
           // modify the following line for step 2
           // throttle error is calculated as the difference btw desired speed ('v_points.back()') and actual speed ('velocity')
-          error_throttle = v_points.back() - velocity;
+          error_throttle = velocity-v_points.back();
 
 
 
